@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Список пользователей</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .user-list {
+            list-style-type: none;
+            padding: 0;
+        }
+        .user-item {
+            padding: 10px;
+            border: 1px solid #ccc;
+            margin-bottom: 5px;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Список пользователей</h1>
+    <ul class="user-list" id="userList">
+        <!-- Сюда будут вставлены пользователи -->
+    </ul>
+
+    <script>
+        // Функция для получения данных о пользователях
+        async function fetchUsers() {
+            try {
+                const response = await fetch('http://localhost:3000/users');
+                if (!response.ok) {
+                    throw new Error('Ошибка при получении данных');
+                }
+                const users = await response.json();
+                displayUsers(users);
+            } catch (error) {
+                console.error('Ошибка:', error);
+            }
+        }
+
+        // Функция для отображения пользователей на странице
+        function displayUsers(users) {
+            const userList = document.getElementById('userList');
+            userList.innerHTML = ''; // Очищаем список перед добавлением новых данных
+
+            users.forEach(user => {
+                const userItem = document.createElement('li');
+                userItem.className = 'user-item';
+                userItem.textContent = `Имя: ${user.firstName}, Email: ${user.email}`; // Предполагаем, что у пользователя есть поля name и email
+                userList.appendChild(userItem);
+            });
+        }
+
+        // Вызываем функцию fetchUsers при загрузке страницы
+        window.onload = fetchUsers;
+    </script>
+</body>
+</html>
